@@ -1,8 +1,9 @@
 type Card = {
-    id: number,
-    value: string,
-    isFlipped: boolean,
-    isMatched: boolean
+    id: number;
+    value: string;
+    isFlipped: boolean;
+    isMatched: boolean;
+    color: string;
 };
 
 class MemoryGame{
@@ -92,12 +93,18 @@ class MemoryGame{
         const totalCards = this.gridSize * this.gridSize;
         const values = Array.from({ length: totalCards / 2 }, (_, i) => i.toString());
         const allValues = [...values, ...values].sort(() => Math.random() - 0.5);
-        this.cards = allValues.map((value, index) => ({
-            id: index,
-            value,
-            isFlipped: false,
-            isMatched: false,
-        }));
+        const colors = ["blue", "red", "green"];
+        const allCards: Card[] = [];
+        let idCounter = 0;
+        values.forEach(value => {
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            allCards.push(
+                {id: idCounter++, value, isFlipped: false, isMatched: false, color},
+                {id: idCounter++, value, isFlipped: false, isMatched: false, color},
+            );
+        });
+
+        this.cards = allCards.sort(() => Math.random() - 0.5);
     }
 
     //display the cards on the grid + setup click events for each card
@@ -115,7 +122,7 @@ class MemoryGame{
 
 
             const cardFront = document.createElement("div");
-            cardFront.classList.add("card-front");
+            cardFront.classList.add("card-front", card.color);
             cardFront.textContent = card.value;
 
 
@@ -155,7 +162,7 @@ class MemoryGame{
     updateCardDisplay(card: Card, flipped: boolean = true){
         const cardElement = document.querySelector(`[data-id="${card.id}"]`);
         if (cardElement){
-            if (card.isFlipped){
+            if (flipped){
                 cardElement.classList.add("flipped");
             } else {
                 cardElement.classList.remove("flipped");

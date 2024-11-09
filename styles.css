@@ -79,6 +79,19 @@ body{
     background-color: #f0f0f0;
 }
 
+/* Color-specific styles for the card front */
+.card-front.blue {
+    background-color: blue;
+}
+
+.card-front.red {
+    background-color: red;
+}
+
+.card-front.green {
+    background-color: green;
+}
+
 @keyframes confetti {
     0% { transform: translateY(0); opacity: 1; }
     100% { transform: translateY(100vh); opacity: 0; }
