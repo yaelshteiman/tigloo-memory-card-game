@@ -16,6 +16,8 @@ class MemoryGame{
     private gameGrid: HTMLElement | null = null;
     private timerInterval: number | undefined = undefined; //used for setInterval
     private isCountdownMode: boolean = false;
+    private extraTimeUsed: boolean = false;
+
 
     constructor() {
         this.init();
@@ -28,12 +30,24 @@ class MemoryGame{
 
         const startRegularButton = document.getElementById("start-regular-game");
         const startCountdownButton = document.getElementById("start-countdown-game");
+        const peekButton = document.getElementById("peek-power-up");
+        const extraTimeButton = document.getElementById("extra-time-power-up");
+        const shuffleButton = document.getElementById("shuffle-power-up");
 
         if (startRegularButton){
             startRegularButton.addEventListener('click', () => this.startNewGame(false));
         }
         if (startCountdownButton){
             startCountdownButton.addEventListener('click', () => this.startNewGame(true));
+        }
+        if (peekButton){
+            peekButton.addEventListener('click', () => this.peekPowerUp());
+        }
+        if (extraTimeButton){
+            extraTimeButton.addEventListener('click', () => this.extraTimePowerUp());
+        }
+        if (shuffleButton){
+            shuffleButton.addEventListener('click', () => this.shufflePowerUp());
         }
     }
 
@@ -246,7 +260,36 @@ class MemoryGame{
         }, 1000);
     }
 
+    peekPowerUp(){
+        this.cards.forEach(card => {
+            if (!card.isMatched){
+                card.isFlipped = true;
+                this.updateCardDisplay(card, true);
+            }
+        });
+        setTimeout(() => {
+            this.cards.forEach(card => {
+                if(!card.isMatched){
+                    card.isFlipped = false;
+                    this.updateCardDisplay(card, false);
+                }
+            })
+        }, 1000);
 
+        this.moves++;
+        if (this.moveCounter){
+            this.moveCounter.textContent = `Moves: ${this.moves}`;
+        }
+
+    }
+
+    extraTimePowerUp(){
+
+    }
+
+    shufflePowerUp(){
+
+    }
 }
 
 window.addEventListener('DOMContentLoaded', ()=>{
