@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+    margin-top: 0;
+    padding: 0;
+}
+
+body{
+    font-family: sans-serif;
+    background-color: #f7f8fc;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#app {
+    text-align: center;
+    width: 80%;
+    max-width: 800px;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#timer, #moves {
+    font-size: 18px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
