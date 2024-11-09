@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                // Set the target to ES6 (or later)
+    "lib": ["DOM", "es2015"],          // Include the DOM and ES6 libraries
+    "module": "ES6",
+    "strict": true,
+    "outDir": "./dist",
+    "sourceMap": true
+  },
+  "include": ["game.ts"]
+}
