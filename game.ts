@@ -170,11 +170,43 @@ class MemoryGame{
 
     checkWinCondition(){
         if (this.cards.every(card => card.isMatched)){
-            alert('Congratulations! you won');
             if (this.timerInterval !== null){
                 clearInterval(this.timerInterval);
             }
+            this.showCelebration();
+            setTimeout(() => {
+                this.startNewGame(this.isCountdownMode);
+            }, 10000);
         }
+    }
+
+    showCelebration() {
+        // Create and display the "Congratulations!" message
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("congrats-message");
+        messageElement.textContent = "Congratulations! You Won!";
+        document.body.appendChild(messageElement);
+
+        // Create the confetti container
+        const confettiContainer = document.createElement("div");
+        confettiContainer.classList.add("confetti-container");
+        document.body.appendChild(confettiContainer);
+
+        // Generate multiple confetti elements
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement("div");
+            confetti.classList.add("confetti");
+            confetti.style.left = `${Math.random() * 100}vw`;
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random colors
+            confetti.style.animationDelay = `${Math.random() * 3}s`; // Random delay
+            confettiContainer.appendChild(confetti);
+        }
+
+        // Remove the message and confetti after 3 seconds
+        setTimeout(() => {
+            document.body.removeChild(messageElement);
+            document.body.removeChild(confettiContainer);
+        }, 10000); // 10-second duration
     }
 
     startTimer(){
@@ -209,6 +241,7 @@ class MemoryGame{
             if (this.timer <= 0){
                 clearInterval(this.timerInterval);
                 alert("Time's up! game over.");
+                this.startNewGame(this.isCountdownMode);
             }
         }, 1000);
     }
