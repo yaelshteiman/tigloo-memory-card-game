@@ -113,19 +113,24 @@ class MemoryGame{
             const cardInner = document.createElement("div");
             cardInner.classList.add("card-inner");
 
+
             const cardFront = document.createElement("div");
             cardFront.classList.add("card-front");
             cardFront.textContent = card.value;
+
 
             const cardBack = document.createElement("div");
             cardBack.classList.add("card-back");
             cardBack.textContent = "";
 
+
             cardElement.appendChild(cardInner);
             cardInner.appendChild(cardFront)
             cardInner.appendChild(cardBack);
 
-            cardElement.addEventListener('click', () => this.handleCardClick(card));
+            if (!card.isMatched){
+                cardElement.addEventListener('click', () => this.handleCardClick(card));
+            }
 
             if(this.gameGrid){
                 this.gameGrid.appendChild(cardElement);
@@ -300,7 +305,27 @@ class MemoryGame{
     }
 
     shufflePowerUp(){
+        this.moves++;
+        if (this.moveCounter) {
+            this.moveCounter.textContent = `Moves: ${this.moves}`;
+        }
+        // const matchedCards = this.cards.filter(card => card.isMatched);
+        const unmatchedCards = this.cards.filter(card => !card.isMatched);
+        for (let i = unmatchedCards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [unmatchedCards[i], unmatchedCards[j]] = [unmatchedCards[j], unmatchedCards[i]];
+        }
 
+        let unmatchedIndex = 0;
+        this.cards = this.cards.map(card => {
+            if (card.isMatched){
+                return card;
+            } else {
+                return unmatchedCards[unmatchedIndex++];
+            }
+        });
+
+        this.renderCards();
     }
 }
 
