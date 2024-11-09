@@ -284,7 +284,19 @@ class MemoryGame{
     }
 
     extraTimePowerUp(){
-
+        if (this.extraTimeUsed){
+            alert("Extra Time can only be used once per game!");
+            return;
+        }
+        if (!this.isCountdownMode){
+            alert("Extra Time is only available in countdown mode");
+            return;
+        }
+        this.extraTimeUsed = true;
+        this.timer += 30;
+        if (this.timerDisplay){
+            this.timerDisplay.textContent = `Time: ${this.timer}s`;
+        }
     }
 
     shufflePowerUp(){
