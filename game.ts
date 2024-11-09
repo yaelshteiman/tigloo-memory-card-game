@@ -4,6 +4,7 @@ type Card = {
     isFlipped: boolean;
     isMatched: boolean;
     color: string;
+    shape: string;
 };
 
 class MemoryGame{
@@ -92,15 +93,17 @@ class MemoryGame{
     generateCards(){
         const totalCards = this.gridSize * this.gridSize;
         const values = Array.from({ length: totalCards / 2 }, (_, i) => i.toString());
-        const allValues = [...values, ...values].sort(() => Math.random() - 0.5);
+        // const allValues = [...values, ...values].sort(() => Math.random() - 0.5);
         const colors = ["blue", "red", "green"];
+        const shapes = ["circle", "square"];
         const allCards: Card[] = [];
         let idCounter = 0;
         values.forEach(value => {
             const color = colors[Math.floor(Math.random() * colors.length)];
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
             allCards.push(
-                {id: idCounter++, value, isFlipped: false, isMatched: false, color},
-                {id: idCounter++, value, isFlipped: false, isMatched: false, color},
+                { id: idCounter++, value, isFlipped: false, isMatched: false, color, shape },
+                { id: idCounter++, value, isFlipped: false, isMatched: false, color, shape },
             );
         });
 
@@ -122,7 +125,7 @@ class MemoryGame{
 
 
             const cardFront = document.createElement("div");
-            cardFront.classList.add("card-front", card.color);
+            cardFront.classList.add("card-front", card.color, card.shape);
             cardFront.textContent = card.value;
 
 
