@@ -11,7 +11,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
     margin: 0;
     font-size: medium;
 }
@@ -19,9 +19,18 @@ body{
 body h1 {
     /*color:#fff;*/
     line-height: 1.2;
-    font-weight: 500;
-    font-size: 2.5rem;
+    font-weight: 700;
+    font-size: 3.5rem;
     /*margin-bottom: 40px;*/
+}
+body h6 {
+    position: absolute;
+    bottom: 10px; /* Adjust the distance from the bottom as needed */
+    width: 100%;
+    text-align: center;
+    font-size: 1.2rem; /* Adjust the font size if needed */
+    color: #333;
+    font-weight: 250;
 }
 
 button {
@@ -45,26 +54,20 @@ button {
 
 }
 
-#timer, #moves {
-    font-size: 16px;
-}
-
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px 10px; /* First value: row gap, second value: column gap */
-}
-
-.grid-container{
-    display: flex;
     align-items: flex-start;
 }
+
 
 .stats{
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px; /* Adjust as needed for spacing */
+    font-size: 18px;
 }
 
 

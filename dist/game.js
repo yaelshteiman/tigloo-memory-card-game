@@ -51,7 +51,6 @@ class MemoryGame {
     }
     startNewGame(isCountdown) {
         this.isCountdownMode = isCountdown;
-        console.log(`countdown mode is ${this.isCountdownMode}`);
         this.resetGame();
         this.generateCards();
         this.renderCards();
@@ -70,12 +69,10 @@ class MemoryGame {
         this.maxSelectableCards = 2;
         if (this.isCountdownMode) {
             this.timer = 120;
-            console.log(`I'm setting the time to 120`);
         }
         else {
             this.timer = 0;
         }
-        console.log(`setting timer to ${this.timer}`);
         if (this.timerInterval !== undefined) {
             clearInterval(this.timerInterval);
             this.timerInterval = undefined;

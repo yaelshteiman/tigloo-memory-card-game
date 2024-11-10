@@ -70,7 +70,6 @@ class MemoryGame{
 
     startNewGame(isCountdown: boolean){
         this.isCountdownMode = isCountdown;
-        console.log(`countdown mode is ${this.isCountdownMode}`);
         this.resetGame();
         this.generateCards();
         this.renderCards();
