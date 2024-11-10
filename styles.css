@@ -5,7 +5,7 @@
 }
 
 body{
-    font-family: sans-serif;
+    font-family: "Gill Sans", sans-serif;
     background-color: #f7f8fc;
     color: #333;
     display: flex;
@@ -13,6 +13,23 @@ body{
     align-items: center;
     height: 100vh;
     margin: 0;
+    font-size: medium;
+}
+
+body h1 {
+    /*color:#fff;*/
+    line-height: 1.2;
+    font-weight: 500;
+    font-size: 2.5rem;
+    /*margin-bottom: 40px;*/
+}
+
+button {
+    font-family: "Gill Sans", sans-serif;
+    padding: 3px 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background-color: #FAF9F6;
 }
 
 #app {
@@ -25,10 +42,11 @@ body{
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+
 }
 
 #timer, #moves {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .grid {
@@ -36,6 +54,19 @@ body{
     grid-template-columns: repeat(4, 1fr);
     gap: 10px 10px; /* First value: row gap, second value: column gap */
 }
+
+.grid-container{
+    display: flex;
+    align-items: flex-start;
+}
+
+.stats{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px; /* Adjust as needed for spacing */
+}
+
 
 .card {
     width: 100px;
@@ -85,24 +116,24 @@ body{
 }
 
 .card-back {
-    background-color: #f0f0f0;
+    background-color: #F0E68C;
 }
 
 /* Color-specific styles for the card front */
 .card-front.blue {
-    background-color: blue;
+    background-color: #6CB4EE;
 }
 
 .card-front.purple {
-    background-color: purple;
+    background-color: #D8BFD8;
 }
 
 .card-front.red {
-    background-color: red;
+    background-color: #E52B50;
 }
 
 .card-front.green {
-    background-color: green;
+    background-color: #ACE1AF;
 }
 
 /* Shape-specific styles */
@@ -215,7 +246,4 @@ input[type="text"] {
     margin-bottom: 10px;
 }
 
-button {
-    padding: 5px 10px;
-    cursor: pointer;
-}
+
