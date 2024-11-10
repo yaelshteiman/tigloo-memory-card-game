@@ -188,7 +188,7 @@ class MemoryGame {
         this.leaderboardContainer = document.createElement("div");
         this.leaderboardContainer.classList.add("leaderboard-container");
         const title = document.createElement("h2");
-        title.textContent = "Leaderboard";
+        title.textContent = `Leaderboard`;
         this.leaderboardContainer.appendChild(title);
         const form = document.createElement("form");
         const nameInput = document.createElement("input");
@@ -227,7 +227,6 @@ class MemoryGame {
         document.body.appendChild(this.leaderboardOverlay);
     }
     showLeaderboard() {
-        console.log("i'm at showLeaderboard");
         if (!this.leaderboardContainer) {
             console.error("Leaderboard container is not initialized!");
             return;
@@ -238,11 +237,13 @@ class MemoryGame {
         }
     }
     saveToLeaderboard(name, moves, time) {
+        const levelKey = `leaderboard-level-${this.gridSize}`;
         const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
         leaderboard.push({
             name,
             moves,
-            time
+            time,
+            level: `${this.gridSize}x${this.gridSize}`
         });
         leaderboard.sort((a, b) => a.moves - b.moves || a.time - b.time);
         localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
@@ -253,27 +254,17 @@ class MemoryGame {
             console.error("Leaderboard container is not initialized!");
             return;
         }
+        const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
         const scoreList = this.leaderboardContainer.querySelector(".score-list");
         if (scoreList) {
             scoreList.innerHTML = "";
-            const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
             leaderboard.forEach((entry) => {
                 const listItem = document.createElement("li");
-                listItem.textContent = `${entry.name} - Moves: ${entry.moves}, Time: ${entry.time}s`;
+                listItem.textContent = `${entry.name} - Moves: ${entry.moves}, Time: ${entry.time}s, Level: ${entry.level}`;
                 scoreList.appendChild(listItem);
             });
         }
     }
-    // getLeaderboard(){
-    //     const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
-    //     const list = document.createElement("ul");
-    //     leaderboard.forEach((entry: {name: string; moves: number; time: number}) => {
-    //         const listItem = document.createElement("li");
-    //         listItem.textContent = `${entry.name} - Moves: ${entry.moves}, Time: ${entry.time}s`;
-    //         list.appendChild(listItem);
-    //     });
-    //     return list;
-    // }
     showCelebration() {
         // Create and display the "Congratulations!" message
         const messageElement = document.createElement("div");
