@@ -51,10 +51,11 @@ class MemoryGame {
     }
     startNewGame(isCountdown) {
         this.isCountdownMode = isCountdown;
+        console.log(`countdown mode is ${this.isCountdownMode}`);
         this.resetGame();
         this.generateCards();
         this.renderCards();
-        if (this.isCountdownMode) {
+        if (isCountdown) {
             this.startCountdown();
         }
         else {
@@ -66,14 +67,15 @@ class MemoryGame {
         this.flippedCards = [];
         this.moves = 0;
         this.extraTimeUsed = false;
-        this.isCountdownMode = false;
         this.maxSelectableCards = 2;
         if (this.isCountdownMode) {
             this.timer = 120;
+            console.log(`I'm setting the time to 120`);
         }
         else {
             this.timer = 0;
         }
+        console.log(`setting timer to ${this.timer}`);
         if (this.timerInterval !== undefined) {
             clearInterval(this.timerInterval);
             this.timerInterval = undefined;
@@ -358,6 +360,7 @@ class MemoryGame {
         if (this.timerInterval !== null) {
             clearInterval(this.timerInterval);
         }
+        // this.timer = 120;
         if (this.timerDisplay) {
             this.timerDisplay.textContent = `Time: ${this.timer}s`;
         }
