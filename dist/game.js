@@ -10,6 +10,8 @@ class MemoryGame {
         this.moveCounter = null;
         this.timerDisplay = null;
         this.gameGrid = null;
+        this.leaderboardOverlay = null;
+        this.leaderboardContainer = null;
         this.timerInterval = undefined; //used for setInterval
         this.isCountdownMode = false;
         this.extraTimeUsed = false;
@@ -19,6 +21,7 @@ class MemoryGame {
         this.gameGrid = document.getElementById("game-grid");
         this.moveCounter = document.getElementById("moves");
         this.timerDisplay = document.getElementById("timer");
+        this.createLeaderboard();
         const startRegularButton = document.getElementById("start-regular-game");
         const startCountdownButton = document.getElementById("start-countdown-game");
         const peekButton = document.getElementById("peek-power-up");
@@ -168,22 +171,109 @@ class MemoryGame {
         this.checkWinCondition();
     }
     checkWinCondition() {
-        console.log("checkWinCondition called");
         if (this.cards.every(card => card.isMatched)) {
             if (this.timerInterval !== null) {
                 clearInterval(this.timerInterval);
             }
             this.showCelebration();
-            if (this.gridSize <= this.maxGridSize) {
-                this.gridSize++;
-                console.log(`Grid size increased to: ${this.gridSize}`);
-            }
-            console.log(this.gridSize);
             setTimeout(() => {
-                this.startNewGame(this.isCountdownMode);
-            }, 10000);
+                this.showLeaderboard();
+            }, 10000); // 10-second delay to match the confetti duration
         }
     }
+    createLeaderboard() {
+        this.leaderboardOverlay = document.createElement("div");
+        this.leaderboardOverlay.classList.add("overlay");
+        this.leaderboardOverlay.style.display = "none"; // hide it initially
+        this.leaderboardContainer = document.createElement("div");
+        this.leaderboardContainer.classList.add("leaderboard-container");
+        const title = document.createElement("h2");
+        title.textContent = "Leaderboard";
+        this.leaderboardContainer.appendChild(title);
+        const form = document.createElement("form");
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Enter your name";
+        nameInput.required = true;
+        form.appendChild(nameInput);
+        const submitButton = document.createElement("button");
+        submitButton.type = "submit";
+        submitButton.textContent = "Add to Leaderboard";
+        form.appendChild(submitButton);
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const playerName = nameInput.value.trim();
+            if (playerName) {
+                this.saveToLeaderboard(playerName, this.moves, this.timer);
+                nameInput.value = "";
+            }
+        });
+        this.leaderboardContainer.appendChild(form);
+        const scoreList = document.createElement("ul");
+        scoreList.classList.add("score-list");
+        this.leaderboardContainer.appendChild(scoreList);
+        // add a restart game button
+        const restartButton = document.createElement("button");
+        restartButton.textContent = "Restart Game";
+        restartButton.addEventListener("click", () => {
+            this.leaderboardOverlay.style.display = "none";
+            if (this.gridSize <= this.maxGridSize) {
+                this.gridSize++;
+            }
+            this.startNewGame(this.isCountdownMode);
+        });
+        this.leaderboardContainer.appendChild(restartButton);
+        this.leaderboardOverlay.appendChild(this.leaderboardContainer);
+        document.body.appendChild(this.leaderboardOverlay);
+    }
+    showLeaderboard() {
+        console.log("i'm at showLeaderboard");
+        if (!this.leaderboardContainer) {
+            console.error("Leaderboard container is not initialized!");
+            return;
+        }
+        this.updateLeaderboardDisplay();
+        if (this.leaderboardOverlay) {
+            this.leaderboardOverlay.style.display = "flex";
+        }
+    }
+    saveToLeaderboard(name, moves, time) {
+        const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+        leaderboard.push({
+            name,
+            moves,
+            time
+        });
+        leaderboard.sort((a, b) => a.moves - b.moves || a.time - b.time);
+        localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+        this.updateLeaderboardDisplay();
+    }
+    updateLeaderboardDisplay() {
+        if (!this.leaderboardContainer) {
+            console.error("Leaderboard container is not initialized!");
+            return;
+        }
+        const scoreList = this.leaderboardContainer.querySelector(".score-list");
+        if (scoreList) {
+            scoreList.innerHTML = "";
+            const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+            leaderboard.forEach((entry) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${entry.name} - Moves: ${entry.moves}, Time: ${entry.time}s`;
+                scoreList.appendChild(listItem);
+            });
+        }
+    }
+    // getLeaderboard(){
+    //     const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+    //     const list = document.createElement("ul");
+    //     leaderboard.forEach((entry: {name: string; moves: number; time: number}) => {
+    //         const listItem = document.createElement("li");
+    //         listItem.textContent = `${entry.name} - Moves: ${entry.moves}, Time: ${entry.time}s`;
+    //         list.appendChild(listItem);
+    //     });
+    //     return list;
+    // }
     showCelebration() {
         // Create and display the "Congratulations!" message
         const messageElement = document.createElement("div");
