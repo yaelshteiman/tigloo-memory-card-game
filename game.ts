@@ -477,8 +477,8 @@ class MemoryGame{
                 ? "Normal Mode"
                 : "Multi-Select Mode";
         }
+        this.startNewGame(this.isCountdownMode);
     }
-
 
 }
 

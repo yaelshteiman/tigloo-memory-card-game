@@ -404,9 +404,10 @@ class MemoryGame {
         const multiSelectToggle = document.getElementById("multi-select-toggle");
         if (multiSelectToggle) {
             multiSelectToggle.textContent = this.isMultiSelectMode
-                ? "Switch to Normal Mode"
-                : "Switch to Multi-Select Mode";
+                ? "Normal Mode"
+                : "Multi-Select Mode";
         }
+        this.startNewGame(this.isCountdownMode);
     }
 }
 window.addEventListener('DOMContentLoaded', () => {
