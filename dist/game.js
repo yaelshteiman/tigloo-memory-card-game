@@ -50,7 +50,6 @@ class MemoryGame {
         }
     }
     startNewGame(isCountdown) {
-        console.log("starting new game");
         this.isCountdownMode = isCountdown;
         this.resetGame();
         this.generateCards();
@@ -63,7 +62,6 @@ class MemoryGame {
         }
     }
     resetGame() {
-        console.log("reset game");
         this.cards = [];
         this.flippedCards = [];
         this.moves = 0;
@@ -94,10 +92,8 @@ class MemoryGame {
         }
     }
     generateCards() {
-        console.log("generateCards");
         const totalCards = this.gridSize * this.gridSize;
         const values = Array.from({ length: totalCards }, (_, i) => i.toString());
-        // console.log(`values: ${values}`);
         values.sort(() => Math.random() - 0.5);
         const colors = ["blue", "red", "green", "purple"];
         const shapes = ["circle", "square"];
@@ -105,7 +101,6 @@ class MemoryGame {
         let idCounter = 0;
         let remainingCards = totalCards;
         while (remainingCards > 0) {
-            console.log(`remainingCards: ${remainingCards}`);
             const randomIndex = Math.floor(Math.random() * values.length);
             const value = values[randomIndex];
             const color = colors[Math.floor(Math.random() * colors.length)];
@@ -126,7 +121,6 @@ class MemoryGame {
     }
     //display the cards on the grid + setup click events for each card
     renderCards() {
-        console.log("renderCards");
         if (!this.gameGrid)
             return;
         this.gameGrid.innerText = '';
@@ -154,14 +148,14 @@ class MemoryGame {
         });
     }
     handleCardClick(card) {
-        if (card.isFlipped || card.isMatched || this.flippedCards.length >= this.maxSelectableCards) {
+        if (card.isFlipped || card.isMatched || this.flippedCards.length > this.maxSelectableCards) {
             return;
         }
         card.isFlipped = true;
         this.updateCardDisplay(card);
         this.flippedCards.push(card);
         if (this.flippedCards.length === this.maxSelectableCards || this.flippedCards.length === 2) {
-            setTimeout(() => this.checkMatch(), 1000);
+            setTimeout(() => this.checkMatch(), 2000);
         }
     }
     updateCardDisplay(card, flipped = true) {
@@ -256,7 +250,6 @@ class MemoryGame {
         const resetButton = document.createElement("button");
         resetButton.textContent = "Reset Leaderboard";
         resetButton.addEventListener('click', () => {
-            console.log("reset leaderboard");
             this.resetLeaderboard();
         });
         this.leaderboardContainer.appendChild(resetButton);
@@ -264,12 +257,10 @@ class MemoryGame {
         const restartButton = document.createElement("button");
         restartButton.textContent = "Restart Game";
         restartButton.addEventListener("click", () => {
-            console.log("restart button clicked");
             this.leaderboardOverlay.style.display = "none";
             if (this.gridSize <= this.maxGridSize) {
                 this.gridSize++;
             }
-            console.log("starting new game is next");
             this.startNewGame(this.isCountdownMode);
         });
         this.leaderboardContainer.appendChild(restartButton);
@@ -286,7 +277,6 @@ class MemoryGame {
         }
     }
     showLeaderboard() {
-        console.log("show leaderboard");
         if (!this.leaderboardContainer) {
             console.error("Leaderboard container is not initialized!");
             return;
