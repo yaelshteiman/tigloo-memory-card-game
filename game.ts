@@ -29,7 +29,8 @@ class MemoryGame{
     private timerInterval: number | undefined = undefined; //used for setInterval
     private isCountdownMode: boolean = false;
     private extraTimeUsed: boolean = false;
-
+    private isMultiSelectMode: boolean = false;
+    private maxSelectableCards: number = 2;
 
     constructor() {
         this.init();
@@ -45,6 +46,7 @@ class MemoryGame{
         const peekButton = document.getElementById("peek-power-up");
         const extraTimeButton = document.getElementById("extra-time-power-up");
         const shuffleButton = document.getElementById("shuffle-power-up");
+        const multiSelectToggle = document.getElementById("multi-select-toggle");
 
         if (startRegularButton){
             startRegularButton.addEventListener('click', () => this.startNewGame(false));
@@ -61,9 +63,10 @@ class MemoryGame{
         if (shuffleButton){
             shuffleButton.addEventListener('click', () => this.shufflePowerUp());
         }
+        if(multiSelectToggle){
+            multiSelectToggle.addEventListener('click', () => this.toggleMultiSelectMode());
+        }
     }
-
-
 
     startNewGame(isCountdown: boolean){
         this.isCountdownMode = isCountdown;
@@ -164,7 +167,7 @@ class MemoryGame{
     }
 
     handleCardClick(card: Card){
-        if (card.isFlipped  || card.isMatched){
+        if (card.isFlipped || card.isMatched || this.flippedCards.length >= this.maxSelectableCards){
             return;
         }
 
@@ -172,8 +175,8 @@ class MemoryGame{
         this.updateCardDisplay(card);
         this.flippedCards.push(card);
 
-        if (this.flippedCards.length === 2){
-            setTimeout(() => this.checkMatch(), 1000);
+        if (this.flippedCards.length === this.maxSelectableCards || this.flippedCards.length === 2){
+            setTimeout(() => this.checkMatch(), 3000);
         }
     }
 
@@ -199,13 +202,18 @@ class MemoryGame{
                 card.isMatched = true;
                 this.updateCardDisplay(card, true);
             });
+            if (this.isMultiSelectMode){
+                this.moves -= 1;
+            } else {
+                this.moves++;
+            }
         } else {
             this.flippedCards.forEach(card => {
                 card.isFlipped = false;
                 this.updateCardDisplay(card, false);
             });
+            this.moves++;
         }
-        this.moves++;
 
         this.flippedCards = []
         if (this.moveCounter){
@@ -293,7 +301,6 @@ class MemoryGame{
     }
 
     saveToLeaderboard(name: string, moves: number, time: number){
-        const levelKey = `leaderboard-level-${this.gridSize}`;
         const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
         leaderboard.push({
             name,
@@ -453,6 +460,23 @@ class MemoryGame{
         });
 
         this.renderCards();
+    }
+
+    toggleMultiSelectMode(){
+        if(!this.isMultiSelectMode){
+            this.isMultiSelectMode = true;
+            this.maxSelectableCards = 3;
+        } else {
+            this.isMultiSelectMode = false;
+            this.maxSelectableCards = 2;
+        }
+
+        const multiSelectToggle = document.getElementById("multi-select-toggle");
+        if (multiSelectToggle){
+            multiSelectToggle.textContent = this.isMultiSelectMode
+                ? "Normal Mode"
+                : "Multi-Select Mode";
+        }
     }
 
 
