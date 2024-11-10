@@ -89,17 +89,29 @@ class MemoryGame {
     }
     generateCards() {
         const totalCards = this.gridSize * this.gridSize;
-        const values = Array.from({ length: totalCards / 2 }, (_, i) => i.toString());
-        // const allValues = [...values, ...values].sort(() => Math.random() - 0.5);
-        const colors = ["blue", "red", "green"];
+        const values = Array.from({ length: totalCards }, (_, i) => i.toString());
+        values.sort(() => Math.random() - 0.5);
+        const colors = ["blue", "red", "green", "purple"];
         const shapes = ["circle", "square"];
         const allCards = [];
         let idCounter = 0;
-        values.forEach(value => {
+        let remainingCards = totalCards;
+        while (remainingCards > 0) {
+            const value = values.pop();
+            if (value === undefined) {
+                throw new Error("Ran out of values to create cards. Check your logic for generating card values.");
+            }
             const color = colors[Math.floor(Math.random() * colors.length)];
             const shape = shapes[Math.floor(Math.random() * shapes.length)];
-            allCards.push({ id: idCounter++, value, isFlipped: false, isMatched: false, color, shape }, { id: idCounter++, value, isFlipped: false, isMatched: false, color, shape });
-        });
+            if (this.isMultiSelectMode && remainingCards >= 3 && Math.random() < 0.5) {
+                allCards.push({ id: idCounter++, value, isFlipped: false, isMatched: false, color, shape }, { id: idCounter++, value, isFlipped: false, isMatched: false, color, shape }, { id: idCounter++, value, isFlipped: false, isMatched: false, color, shape });
+                remainingCards -= 3;
+            }
+            else if (remainingCards >= 2) {
+                allCards.push({ id: idCounter++, value, isFlipped: false, isMatched: false, color, shape }, { id: idCounter++, value, isFlipped: false, isMatched: false, color, shape });
+                remainingCards -= 2;
+            }
+        }
         this.cards = allCards.sort(() => Math.random() - 0.5);
     }
     //display the cards on the grid + setup click events for each card

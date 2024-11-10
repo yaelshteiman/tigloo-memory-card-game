@@ -93,6 +93,10 @@ body{
     background-color: blue;
 }
 
+.card-front.purple {
+    background-color: purple;
+}
+
 .card-front.red {
     background-color: red;
 }
