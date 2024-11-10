@@ -50,6 +50,7 @@ class MemoryGame {
         }
     }
     startNewGame(isCountdown) {
+        console.log("starting new game");
         this.isCountdownMode = isCountdown;
         this.resetGame();
         this.generateCards();
@@ -62,16 +63,20 @@ class MemoryGame {
         }
     }
     resetGame() {
+        console.log("reset game");
         this.cards = [];
         this.flippedCards = [];
         this.moves = 0;
+        this.extraTimeUsed = false;
+        this.isCountdownMode = false;
+        this.maxSelectableCards = 2;
         if (this.isCountdownMode) {
             this.timer = 120;
         }
         else {
             this.timer = 0;
         }
-        if (this.timerInterval !== null) {
+        if (this.timerInterval !== undefined) {
             clearInterval(this.timerInterval);
             this.timerInterval = undefined;
         }
@@ -83,13 +88,16 @@ class MemoryGame {
         }
         if (this.gameGrid) {
             this.gameGrid.innerHTML = '';
+            // this.gameGrid.style.display = "grid";
             this.gameGrid.style.gridTemplateColumns = `repeat(${this.gridSize}, 1fr)`; // Adjust grid layout
             this.gameGrid.style.gridTemplateRows = `repeat(${this.gridSize}, 1fr)`; // Adjust grid layout
         }
     }
     generateCards() {
+        console.log("generateCards");
         const totalCards = this.gridSize * this.gridSize;
         const values = Array.from({ length: totalCards }, (_, i) => i.toString());
+        // console.log(`values: ${values}`);
         values.sort(() => Math.random() - 0.5);
         const colors = ["blue", "red", "green", "purple"];
         const shapes = ["circle", "square"];
@@ -97,10 +105,9 @@ class MemoryGame {
         let idCounter = 0;
         let remainingCards = totalCards;
         while (remainingCards > 0) {
-            const value = values.pop();
-            if (value === undefined) {
-                throw new Error("Ran out of values to create cards. Check your logic for generating card values.");
-            }
+            console.log(`remainingCards: ${remainingCards}`);
+            const randomIndex = Math.floor(Math.random() * values.length);
+            const value = values[randomIndex];
             const color = colors[Math.floor(Math.random() * colors.length)];
             const shape = shapes[Math.floor(Math.random() * shapes.length)];
             if (this.isMultiSelectMode && remainingCards >= 3 && Math.random() < 0.5) {
@@ -111,11 +118,15 @@ class MemoryGame {
                 allCards.push({ id: idCounter++, value, isFlipped: false, isMatched: false, color, shape }, { id: idCounter++, value, isFlipped: false, isMatched: false, color, shape });
                 remainingCards -= 2;
             }
+            else {
+                break;
+            }
         }
         this.cards = allCards.sort(() => Math.random() - 0.5);
     }
     //display the cards on the grid + setup click events for each card
     renderCards() {
+        console.log("renderCards");
         if (!this.gameGrid)
             return;
         this.gameGrid.innerText = '';
@@ -150,7 +161,7 @@ class MemoryGame {
         this.updateCardDisplay(card);
         this.flippedCards.push(card);
         if (this.flippedCards.length === this.maxSelectableCards || this.flippedCards.length === 2) {
-            setTimeout(() => this.checkMatch(), 3000);
+            setTimeout(() => this.checkMatch(), 1000);
         }
     }
     updateCardDisplay(card, flipped = true) {
@@ -168,14 +179,19 @@ class MemoryGame {
         }
     }
     checkMatch() {
-        const allMatch = this.flippedCards.every(card => card.value === this.flippedCards[0].value);
+        const allMatch = this.flippedCards.every(card => card.value === this.flippedCards[0].value
+            && card.shape === this.flippedCards[0].shape
+            && card.color === this.flippedCards[0].color);
         if (allMatch) {
             this.flippedCards.forEach(card => {
                 card.isMatched = true;
                 this.updateCardDisplay(card, true);
             });
             if (this.isMultiSelectMode) {
-                this.moves -= 1;
+                this.moves--;
+                if (this.moves < 0) {
+                    this.moves = 0;
+                }
             }
             else {
                 this.moves++;
@@ -236,21 +252,41 @@ class MemoryGame {
         const scoreList = document.createElement("ul");
         scoreList.classList.add("score-list");
         this.leaderboardContainer.appendChild(scoreList);
+        // reset leaderboard button
+        const resetButton = document.createElement("button");
+        resetButton.textContent = "Reset Leaderboard";
+        resetButton.addEventListener('click', () => {
+            console.log("reset leaderboard");
+            this.resetLeaderboard();
+        });
+        this.leaderboardContainer.appendChild(resetButton);
         // add a restart game button
         const restartButton = document.createElement("button");
         restartButton.textContent = "Restart Game";
         restartButton.addEventListener("click", () => {
+            console.log("restart button clicked");
             this.leaderboardOverlay.style.display = "none";
             if (this.gridSize <= this.maxGridSize) {
                 this.gridSize++;
             }
+            console.log("starting new game is next");
             this.startNewGame(this.isCountdownMode);
         });
         this.leaderboardContainer.appendChild(restartButton);
         this.leaderboardOverlay.appendChild(this.leaderboardContainer);
         document.body.appendChild(this.leaderboardOverlay);
     }
+    resetLeaderboard() {
+        localStorage.removeItem("leaderboard");
+        if (this.leaderboardContainer) {
+            const scoreList = this.leaderboardContainer.querySelector("ul");
+            if (scoreList) {
+                scoreList.innerHTML = "";
+            }
+        }
+    }
     showLeaderboard() {
+        console.log("show leaderboard");
         if (!this.leaderboardContainer) {
             console.error("Leaderboard container is not initialized!");
             return;
