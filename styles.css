@@ -50,12 +50,16 @@ body{
     position: absolute;
     transform-style: preserve-3d;
     transition: transform 0.6s;
-    transform: rotateY(0deg); /* Initial state: not flipped */
+    /*transform: rotateY(0deg); !* Initial state: not flipped *!*/
 }
 
 .card.flipped .card-inner {
     transform: rotateY(180deg); /* Flip the card when 'flipped' class is added */
 }
+
+/*.card.matched .card-inner {*/
+/*    transform: none; !* Keep matched cards face-up *!*/
+/*}*/
 
 .card-front,
 .card-back {

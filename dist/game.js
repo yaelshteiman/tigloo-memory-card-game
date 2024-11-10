@@ -2,6 +2,7 @@
 class MemoryGame {
     constructor() {
         this.gridSize = 4;
+        this.maxGridSize = 6;
         this.cards = [];
         this.flippedCards = [];
         this.moves = 0;
@@ -73,6 +74,8 @@ class MemoryGame {
         }
         if (this.gameGrid) {
             this.gameGrid.innerHTML = '';
+            this.gameGrid.style.gridTemplateColumns = `repeat(${this.gridSize}, 1fr)`; // Adjust grid layout
+            this.gameGrid.style.gridTemplateRows = `repeat(${this.gridSize}, 1fr)`; // Adjust grid layout
         }
     }
     generateCards() {
@@ -132,7 +135,10 @@ class MemoryGame {
     updateCardDisplay(card, flipped = true) {
         const cardElement = document.querySelector(`[data-id="${card.id}"]`);
         if (cardElement) {
-            if (flipped) {
+            if (card.isMatched) {
+                cardElement.classList.add("matched");
+            }
+            else if (flipped) {
                 cardElement.classList.add("flipped");
             }
             else {
@@ -162,11 +168,17 @@ class MemoryGame {
         this.checkWinCondition();
     }
     checkWinCondition() {
+        console.log("checkWinCondition called");
         if (this.cards.every(card => card.isMatched)) {
             if (this.timerInterval !== null) {
                 clearInterval(this.timerInterval);
             }
             this.showCelebration();
+            if (this.gridSize <= this.maxGridSize) {
+                this.gridSize++;
+                console.log(`Grid size increased to: ${this.gridSize}`);
+            }
+            console.log(this.gridSize);
             setTimeout(() => {
                 this.startNewGame(this.isCountdownMode);
             }, 10000);
@@ -191,7 +203,7 @@ class MemoryGame {
             confetti.style.animationDelay = `${Math.random() * 3}s`; // Random delay
             confettiContainer.appendChild(confetti);
         }
-        // Remove the message and confetti after 3 seconds
+        // Remove the message and confetti after 10 seconds
         setTimeout(() => {
             document.body.removeChild(messageElement);
             document.body.removeChild(confettiContainer);

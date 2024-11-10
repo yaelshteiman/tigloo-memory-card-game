@@ -9,6 +9,7 @@ type Card = {
 
 class MemoryGame{
     private gridSize : number = 4;
+    private maxGridSize: number = 6;
     private cards: Card[] = [];
     private flippedCards: Card[] = [];
     private moves: number = 0;
@@ -87,6 +88,9 @@ class MemoryGame{
         }
         if (this.gameGrid) {
             this.gameGrid.innerHTML = ''
+            this.gameGrid.style.gridTemplateColumns = `repeat(${this.gridSize}, 1fr)`; // Adjust grid layout
+            this.gameGrid.style.gridTemplateRows = `repeat(${this.gridSize}, 1fr)`;   // Adjust grid layout
+
         }
     }
 
@@ -165,7 +169,9 @@ class MemoryGame{
     updateCardDisplay(card: Card, flipped: boolean = true){
         const cardElement = document.querySelector(`[data-id="${card.id}"]`);
         if (cardElement){
-            if (flipped){
+            if (card.isMatched){
+                cardElement.classList.add("matched");
+            } else if (flipped){
                 cardElement.classList.add("flipped");
             } else {
                 cardElement.classList.remove("flipped");
@@ -198,11 +204,18 @@ class MemoryGame{
     }
 
     checkWinCondition(){
+        console.log("checkWinCondition called");
         if (this.cards.every(card => card.isMatched)){
             if (this.timerInterval !== null){
                 clearInterval(this.timerInterval);
             }
             this.showCelebration();
+
+            if (this.gridSize <= this.maxGridSize) {
+                this.gridSize++;
+                console.log(`Grid size increased to: ${this.gridSize}`);
+            }
+            console.log(this.gridSize);
             setTimeout(() => {
                 this.startNewGame(this.isCountdownMode);
             }, 10000);
@@ -231,7 +244,7 @@ class MemoryGame{
             confettiContainer.appendChild(confetti);
         }
 
-        // Remove the message and confetti after 3 seconds
+        // Remove the message and confetti after 10 seconds
         setTimeout(() => {
             document.body.removeChild(messageElement);
             document.body.removeChild(confettiContainer);
