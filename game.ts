@@ -21,6 +21,7 @@ class MemoryGame{
     private flippedCards: Card[] = [];
     private moves: number = 0;
     private timer: number = 0;
+    private countdown_time: number = 120;
     private moveCounter: HTMLElement | null = null;
     private timerDisplay: HTMLElement | null = null;
     private gameGrid: HTMLElement | null = null;
@@ -29,6 +30,7 @@ class MemoryGame{
     private timerInterval: number | undefined = undefined; //used for setInterval
     private isCountdownMode: boolean = false;
     private extraTimeUsed: boolean = false;
+    private extraTime: number = 30;
     private isMultiSelectMode: boolean = false;
     private maxSelectableCards: number = 2;
 
@@ -108,7 +110,7 @@ class MemoryGame{
         this.extraTimeUsed = false;
         this.maxSelectableCards = 2;
         if (this.isCountdownMode){
-            this.timer = 120;
+            this.timer = this.countdown_time;
         } else {
             this.timer = 0;
         }
@@ -314,7 +316,11 @@ class MemoryGame{
             event.preventDefault();
             const playerName = nameInput.value.trim();
             if(playerName){
-                this.saveToLeaderboard(playerName, this.moves, this.timer);
+                let time = this.timer;
+                if (this.isCountdownMode){
+                    time = (this.countdown_time + (this.extraTimeUsed ? this.extraTime : 0)) - this.timer;
+                }
+                this.saveToLeaderboard(playerName, this.moves, time);
                 nameInput.value = "";
             }
         });
@@ -509,7 +515,7 @@ class MemoryGame{
             return;
         }
         this.extraTimeUsed = true;
-        this.timer += 30;
+        this.timer += this.extraTime;
         if (this.timerDisplay){
             this.timerDisplay.textContent = `Time: ${this.timer}s`;
         }
