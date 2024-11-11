@@ -13,23 +13,16 @@ A strategic memory card game built using pure Typescript, with a few added twist
 ---
 
 ## SetUp Instructions
-### Prerequisites:
-1. **Node.js**: Ensure that you have Node.js installed on your system. <br>You can download it [here](https://nodejs.org/).
-
 
 ### Steps to Run the Project:
 1. **Clone the repository**
-2. **Install dependencies:**
-   ```sh
-   npm install
-   ```
-3. Compile TypeScript to JavaScript:
+2. **Compile TypeScript to JavaScript:**
    * To compile TypeScript code, run:
    ```sh
    npx tsc
    ```
    * This will generate the JavaScript code in the dist directory.
-4. Start a local server:
+3. **Start a local server:**
    * To serve your project locally, you can use a simple HTTP server like `http-server`:
    ```sh
    npx http-server .
