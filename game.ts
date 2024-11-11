@@ -33,7 +33,11 @@ class MemoryGame{
     private maxSelectableCards: number = 2;
 
     constructor() {
-        this.init();
+        try{
+            this.init();
+        } catch (error){
+            console.error("Error during game initialization:", error);
+        }
     }
 
     init(){
@@ -51,20 +55,33 @@ class MemoryGame{
         if (startRegularButton){
             startRegularButton.addEventListener('click', () => this.startNewGame(false));
         }
+        else {
+            console.error("Error: 'Start Regular Game' button not found.");
+        }
         if (startCountdownButton){
             startCountdownButton.addEventListener('click', () => this.startNewGame(true));
+        } else {
+            console.error("Error: 'Start Countdown Game' button not found.");
         }
         if (peekButton){
             peekButton.addEventListener('click', () => this.peekPowerUp());
+        } else {
+            console.error("Error: 'Peek Power-Up' button not found.");
         }
         if (extraTimeButton){
             extraTimeButton.addEventListener('click', () => this.extraTimePowerUp());
+        } else {
+            console.error("Error: 'Extra Time Power-Up' button not found.");
         }
         if (shuffleButton){
             shuffleButton.addEventListener('click', () => this.shufflePowerUp());
+        } else {
+            console.error("Error: 'Shuffle Power-Up' button not found.");
         }
         if(multiSelectToggle){
             multiSelectToggle.addEventListener('click', () => this.toggleMultiSelectMode());
+        } else {
+            console.error("Error: 'Multi-Select Mode' toggle not found.");
         }
     }
 

@@ -17,22 +17,20 @@ body{
 }
 
 body h1 {
-    /*color:#fff;*/
     line-height: 1.2;
     font-weight: 700;
     font-size: 3.5rem;
-    /*margin-bottom: 40px;*/
 }
 
-body h6 {
-    position: absolute;
-    bottom: 5px;
-    width: 100%;
-    text-align: center;
-    font-size: 1.2rem; /* Adjust the font size if needed */
-    color: #333;
-    font-weight: 250;
-}
+/*body h6 {*/
+/*    position: absolute;*/
+/*    bottom: 5px;*/
+/*    width: 100%;*/
+/*    text-align: center;*/
+/*    font-size: 1.2rem; !* Adjust the font size if needed *!*/
+/*    color: #333;*/
+/*    font-weight: 250;*/
+/*}*/
 
 button {
     font-family: "Gill Sans", sans-serif;
