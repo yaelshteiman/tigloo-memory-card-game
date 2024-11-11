@@ -257,7 +257,7 @@ class MemoryGame {
         restartButton.textContent = "Restart Game";
         restartButton.addEventListener("click", () => {
             this.leaderboardOverlay.style.display = "none";
-            if (this.gridSize <= this.maxGridSize) {
+            if (this.gridSize < this.maxGridSize) {
                 this.gridSize++;
             }
             this.startNewGame(this.isCountdownMode);

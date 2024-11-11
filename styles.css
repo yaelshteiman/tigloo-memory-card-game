@@ -23,9 +23,10 @@ body h1 {
     font-size: 3.5rem;
     /*margin-bottom: 40px;*/
 }
+
 body h6 {
     position: absolute;
-    bottom: 10px; /* Adjust the distance from the bottom as needed */
+    bottom: 5px;
     width: 100%;
     text-align: center;
     font-size: 1.2rem; /* Adjust the font size if needed */
@@ -248,5 +249,3 @@ input[type="text"] {
     padding: 5px;
     margin-bottom: 10px;
 }
-
-
