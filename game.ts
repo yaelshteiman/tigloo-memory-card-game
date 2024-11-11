@@ -165,7 +165,10 @@ class MemoryGame{
 
     //display the cards on the grid + setup click events for each card
     renderCards(){
-        if (!this.gameGrid) return;
+        if (!this.gameGrid){
+            console.error("Error: No game grid found.");
+            return;
+        }
         this.gameGrid.innerText = '';
 
         this.cards.forEach(card => {
