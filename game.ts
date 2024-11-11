@@ -40,6 +40,7 @@ class MemoryGame{
         }
     }
 
+    // Initializes the game, sets up the UI elements and event listeners
     init(){
         this.gameGrid = document.getElementById("game-grid");
         this.moveCounter = document.getElementById("moves");
@@ -85,6 +86,7 @@ class MemoryGame{
         }
     }
 
+    // Starts a new game, resets the board, and sets the game mode
     startNewGame(isCountdown: boolean){
         this.isCountdownMode = isCountdown;
         this.resetGame();
@@ -98,6 +100,7 @@ class MemoryGame{
         }
     }
 
+    // Resets the game state, including the timer, moves, and card states
     resetGame(){
         this.cards = []
         this.flippedCards = []
@@ -127,6 +130,7 @@ class MemoryGame{
         }
     }
 
+    // Generates the cards for the game, ensuring pairs (or triplets in multi-select mode)
     generateCards(){
         const totalCards = this.gridSize * this.gridSize;
         const values = Array.from({ length: totalCards }, (_, i) => i.toString());
@@ -163,7 +167,7 @@ class MemoryGame{
         this.cards = allCards.sort(() => Math.random() - 0.5);
     }
 
-    //display the cards on the grid + setup click events for each card
+    //display the cards on the grid and setup click events for each card
     renderCards(){
         if (!this.gameGrid){
             console.error("Error: No game grid found.");
@@ -204,6 +208,7 @@ class MemoryGame{
         });
     }
 
+    // Handles the card click event, flipping the card and checking for matches
     handleCardClick(card: Card){
         if (card.isFlipped || card.isMatched || this.flippedCards.length > this.maxSelectableCards){
             return;
@@ -214,10 +219,11 @@ class MemoryGame{
         this.flippedCards.push(card);
 
         if (this.flippedCards.length === this.maxSelectableCards || this.flippedCards.length === 2){
-            setTimeout(() => this.checkMatch(), 2000);
+            setTimeout(() => this.checkMatch(), 2000); // 2 second delay
         }
     }
 
+    // Updates the display of a card based on its state
     updateCardDisplay(card: Card, flipped: boolean = true){
         const cardElement = document.querySelector(`[data-id="${card.id}"]`);
         if (cardElement){
@@ -231,6 +237,7 @@ class MemoryGame{
         }
     }
 
+    // Checks if the flipped cards match, updates the game state accordingly
     checkMatch(){
         const allMatch = this.flippedCards.every(card =>
                 card.value === this.flippedCards[0].value
@@ -265,6 +272,7 @@ class MemoryGame{
         this.checkWinCondition();
     }
 
+    // Checks if all cards have been matched, then shows a celebration and leaderboard
     checkWinCondition(){
         if (this.cards.every(card => card.isMatched)){
             if (this.timerInterval !== null){
@@ -277,6 +285,7 @@ class MemoryGame{
         }
     }
 
+    // Creates the leaderboard UI and sets up related event handlers
     createLeaderboard(){
         this.leaderboardOverlay = document.createElement("div");
         this.leaderboardOverlay.classList.add("overlay");
@@ -339,6 +348,7 @@ class MemoryGame{
         document.body.appendChild(this.leaderboardOverlay);
     }
 
+    // Resets the leaderboard data in local storage
     resetLeaderboard(){
         localStorage.removeItem("leaderboard");
         if(this.leaderboardContainer){
@@ -349,6 +359,7 @@ class MemoryGame{
         }
     }
 
+    // Displays the leaderboard with the current scores
     showLeaderboard(){
         if (!this.leaderboardContainer){
             console.error("Leaderboard container is not initialized!");
@@ -361,6 +372,7 @@ class MemoryGame{
         }
     }
 
+    // Saves a player's score to the leaderboard
     saveToLeaderboard(name: string, moves: number, time: number){
         const leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
         leaderboard.push({
@@ -374,6 +386,7 @@ class MemoryGame{
         this.updateLeaderboardDisplay();
     }
 
+    // Updates the leaderboard display with the saved scores
     updateLeaderboardDisplay(){
         if(!this.leaderboardContainer){
             console.error("Leaderboard container is not initialized!");
@@ -393,7 +406,7 @@ class MemoryGame{
         }
     }
 
-
+    // Shows a celebration animation when the game is won
     showCelebration() {
         // Create and display the "Congratulations!" message
         const messageElement = document.createElement("div");
@@ -423,6 +436,7 @@ class MemoryGame{
         }, 10000); // 10-second duration
     }
 
+    // Starts a timer that counts up
     startTimer(){
         if (this.timerInterval !== null){
             clearInterval(this.timerInterval);
@@ -440,11 +454,11 @@ class MemoryGame{
         }, 1000);
     }
 
+    // Starts a countdown timer
     startCountdown(){
         if (this.timerInterval !== null){
             clearInterval(this.timerInterval);
         }
-        // this.timer = 120;
         if(this.timerDisplay){
             this.timerDisplay.textContent = `Time: ${this.timer}s`;
         }
@@ -460,6 +474,7 @@ class MemoryGame{
             }
         }, 1000);
     }
+
 
     peekPowerUp(){
         this.cards.forEach(card => {
@@ -524,6 +539,7 @@ class MemoryGame{
         this.renderCards();
     }
 
+    // Toggles multi-select mode, allowing three cards to be selected
     toggleMultiSelectMode(){
         if(!this.isMultiSelectMode){
             this.isMultiSelectMode = true;
@@ -543,6 +559,7 @@ class MemoryGame{
     }
 }
 
+// Initialize the game when the DOM is fully loaded
 window.addEventListener('DOMContentLoaded', ()=>{
     new MemoryGame();
 });

@@ -84,4 +84,4 @@ A strategic memory card game built using pure Typescript, with a few added twist
 5. **Accessibility:** Include keyboard controls.
 6. **Dynamic Grid Size:** Provide an option for players to choose grid size at the start of the game.
 7. **Dark Mode:** Implement a dark mode bor better user experience in low-light conditions.
-
+8. **Colors and Shapes:** Adding more colors and shapes to make it more challenging.
